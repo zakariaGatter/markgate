@@ -18,11 +18,14 @@ plugins=(... markgate ... )
 ---
 
 * [X] : **Add Mark**
+
  ```sh
  cd ~/.oh-my-zsh/custom/plugins/markgate
  markadd markgate
 ```
+
 or
+
 ```sh
 markadd makgate ~/.oh-my-zsh/custom/plugins/markgate
 ```
@@ -52,5 +55,8 @@ To Specific **MarkGate** Config File Add this line to your ```~/.zshrc```
 
 If You Found any issues or have new ideos please send me a mail to :
 
-**Gmail : **
-```zakaria.gatter@gmail.com```
+**Gmail :**
+
+```
+zakaria.gatter@gmail.com
+```
