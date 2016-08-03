@@ -32,12 +32,14 @@ if [ ! -z "$2" ];then
         echo -e "MarkGate :\n\tThis Mark already Existed, try other Name "
     fi
 else
-    # Get courrent PATH 
-    local _Path=$(pwd | sed -e "s:^$HOME:~:")
     # Check if the mark already exist 
     local _A_check=$(grep "^$1" $_MARK_FILE)
     
     if [ -z "$_A_check" ];then 
+
+    # Check if the mark already exist 
+    local _A_check=$(grep "^$1" $_MARK_FILE)
+
         echo -e "${1}=${_Path} " >> $_MARK_FILE
         echo -e "MarkGate : $1 Saved "
     else
