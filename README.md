@@ -44,6 +44,7 @@ markdel markgate
 markjumb markgate
 ```
 * [X] : **Show Marks**
+
  ```sh
 markshow
  ```
@@ -61,7 +62,7 @@ default Config File :
 * MARKGATE_FILE="markgate"
 
 
-``` Config File is olways on this Directorie "**~/.$MARKGATE_FILE**"```
+ Config File is olways on this Directorie `~/.$MARKGATE_FILE`
 
 ### [!] Notes
 
@@ -69,6 +70,13 @@ If You Found any issues or have new ideos please send me a mail to :
 
 **Gmail :**
 
-``` sh
+``` bash
 zakaria.gatter@gmail.com
+
 ```
+
+#### You may like 
+
+ * [Gatter Theme ](https://github.com/zakariaGatter/gatter_oh-my-zsh_theme)
+ * [Powergate Theme](https://github.com/zakariaGatter/Powergate)
+ * [MarkEdit](https://github.com/zakariaGatter/MarkEdit)
