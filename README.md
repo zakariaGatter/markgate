@@ -1,7 +1,7 @@
 
 # MarkGate
 
-a very simple Oh-My-ZSH Plugin to mark Directories
+a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist marks
 
 ## INSTALATION
 
@@ -62,7 +62,7 @@ default Config File :
 * MARKGATE_FILE="markgate"
 
 
- Config File is olways on this Directorie `~/.$MARKGATE_FILE`
+ Config File is always on this Directorie `~/.$MARKGATE_FILE`
 
 ### [!] Notes
 
