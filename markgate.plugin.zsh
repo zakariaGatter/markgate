@@ -30,35 +30,29 @@ export _MARK_FILE="$HOME/.$MARK_FILE"
 #--------------#
 function markadd () {
     # Check if there is to many argulent 
-    if [ "$#" -gt "2" ];then 
-        echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}"
-        exit 1
-    fi 
+    [ "$#" -gt "2" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}" && return
+    [ "$#" -lt "1" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : Please Set Mark Name ${Off}" && return
 
     # Check if the mark are already exist
-    local _A_check=$(grep -w "^$1" $_MARK_FILE)
+    _A_check=$(grep -w "^$1" $_MARK_FILE)
 
 if [ -n "$2" ];then 
-    local PATH_=$(echo "$@" | cut -d " " -f2- )
-    local _PATH_=$(echo "$PATH_" | sed -e "s:^$HOME:~:" )
+    PATH_=$(echo "$@" | cut -d " " -f2- )
+    _PATH_=$(echo "$PATH_" | sed -e "s:^$HOME:~:" )
 
     if [ -z "$_A_check" ];then 
         echo -e "${1}=${_PATH_} " >> $_MARK_FILE
-        echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Saved ${Off}"
-        exit 0
+        echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Saved ${Off}" && return
     else
-        echo -e "${BYellow} ==> MarkGate :\n\t[${BRed}${$1}${BWhite}] already Existed, try other Name ${Off}"
-        exit 3
+        echo -e "${BYellow} ==> MarkGate :\n\t[${BRed}${$1}${BWhite}] already Existed, try other Name ${Off}" && return
     fi
 elif [ -z "$2" ];then 
-    _PATH=$(pwd | sed -e "s:^$HOME:~:")
+    _PATH_=$(pwd | sed -e "s:^$HOME:~:")
     if [ -z "$_A_check" ];then 
-        echo -e "${1}=${_PATH} " >> $_MARK_FILE
-        echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Saved ${Off}"
-        exit 0
+        echo -e "${1}=${_PATH_} " >> $_MARK_FILE
+        echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Saved ${Off}" && return
     else
-        echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] already Existed, try other Name ${Off}"
-        exit 3
+        echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] already Existed, try other Name ${Off}" && return
     fi
 fi
 }
@@ -68,20 +62,16 @@ fi
 #-----------------#
 function markdel () {
     # Check if there is to many argulent 
-    if [ "$#" -gt "1" ];then 
-        echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}"
-        exit 1
-    fi 
+    [ "$#" -gt "1" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}" && return
+    [ "$#" -lt "1" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : Please Set Mark Name ${Off}" && return
 
-    local _D_check=$(grep -w "${1}" $_MARK_FILE)
+    _D_check=$(grep -w "${1}" $_MARK_FILE)
 if [ -z "$_D_check" ];then 
-    echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] Those not Exist ${Off}"
-    exit 1
+    echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] Those not Exist ${Off}" && return
 else
     sed -i "/${1}/d" $_MARK_FILE
     sed -i '/^$/d' $_MARK_FILE
-    echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Deledted ${Off}"
-    exit 0
+    echo -e "${BBlue} -->${BWhite} MarkGate : [${BGreen}${1}${BWhite}] Deledted ${Off}" && return
 fi
 }
 
@@ -90,19 +80,16 @@ fi
 #---------------#
 function markjumb () {
     # Check if there is to many argulent 
-    if [ "$#" -gt "2" ];then 
-        echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}"
-        exit 1
-    fi 
+    [ "$#" -gt "2" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : To Many Argument ${Off}" && return
+    [ "$#" -lt "1" ] && echo -e "${BYellow} ==>${BWhite} MarkGate : Please Set Mark Name ${Off}" && return
 
-    local _J_check=$(grep -w "$1" $_MARK_FILE)
+    _J_check=$(grep -w "$1" $_MARK_FILE)
 
 if [ -z "$_J_check" ];then 
-    echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] : Those not Exist ${Off}"
-    exit 3
+    echo -e "${BYellow} ==>${BWhite} MarkGate :\n\t[${BRed}${1}${BWhite}] : Those not Exist ${Off}" && return
 else
-    local J_dir=$(cat $_MARK_FILE | grep -w "$1" | cut -d "=" -f2 | tr -d " ")
-    local _J_dir=$(echo "$J_dir" | sed -e "s:^~:$HOME:")
+    J_dir=$(cat $_MARK_FILE | grep -w "$1" | cut -d "=" -f2 | tr -d " ")
+    _J_dir=$(echo "$J_dir" | sed -e "s:^~:$HOME:")
     cd "${_J_dir}"
 fi
 }
@@ -111,11 +98,10 @@ fi
 # MARKGATE SHOW #
 #---------------#
 function markshow () {
-	local Show_check=$(column -t -s = $_MARK_FILE | wc -l )
+	Show_check=$(column -t -s = $_MARK_FILE | wc -l )
 	if [ "$Show_check" = "0" ];then 
 		echo -e "\n${BWhite} MarkGate : "
 		echo -e "${BBlue} -->${BWhite} No Mark Set ${Of}"
-        exit 1
 	else
 		echo -e "\n${BBlue} -->${BWhite} MarkGate : Show Mark's \n"
 		column -t -s = $_MARK_FILE
