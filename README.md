@@ -77,6 +77,5 @@ zakaria.gatter@gmail.com
 
 #### You may like 
 
- * [Gatter Theme ](https://github.com/zakariaGatter/gatter_oh-my-zsh_theme)
  * [Powergate Theme](https://github.com/zakariaGatter/Powergate)
  * [MarkEdit](https://github.com/zakariaGatter/MarkEdit)
