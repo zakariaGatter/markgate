@@ -15,36 +15,37 @@ _VERSION_="29/04/2018"
 # Help Dialog 
 USAGE () {
 echo "
-                MARK GATE ($_VERSION_)
-                Written by Zakaria Barkouk (zakaria.gatter@gmail.com)
+        MARK GATE ($_VERSION_)
+        Written by Zakaria Barkouk (zakaria.gatter@gmail.com)
 
-                Mark your directory's for Easy Access
+        Mark your directory's for Easy Access
 
-    OPTS    :       
-                ga          Add Mark Directory
-                gr          Remove Mark Directory 
-                gs          Show All Mark Directory's
-                gj          Jumb To mark Directory
+OPTS    :       
+        ga          Add Mark Directory
+        gr          Remove Mark Directory 
+        gs          Show All Mark Directory's
+        gj          Jumb To mark Directory
 
-    EXAMPLE :   ga home             ( add 'home' Mark to corrent Directory)
-                ga home $HOME       ( Add 'home' Mark to $HOME Directory)
-                gj home             ( Jumb to 'home' Mark)
-                gr home             ( Delete 'home' Mark and suport multi Delete )
+EXAMPLE :   
+        ga home     ( add 'home' Mark to corrent Directory)
+        ga home ~   ( Add 'home' Mark to $HOME Directory)
+        gj home     ( Jumb to 'home' Mark)
+        gr home     ( Delete 'home' Mark and suport multi Delete )
 
-    File    :   DIR_GATE=$DIR_GATE
+File    :   DIR_GATE=$DIR_GATE
 "
 }
 
 # Add new mark 
 ga () {
-    [ "$#" -eq "2" ] || { echo "Wrong argument(s), please see help for more information" && exit 0 }
-    [ "$1" = "help" -o -z "$1" ] && { USAGE && exit 0 }
+    [ "$#" -eq "2" ] || { echo "Wrong argument(s), please see help for more information" && return 0 }
+    [ "$1" = "help" -o -z "$1" ] && { USAGE && return 0 }
 
-[ -d "$1" ] && { echo "" && exit 1 } ||{
+[ -d "$1" ] && { echo "" && return 1 } ||{
     [ -n "$2" ] && {
         _CHECK_=$(grep "^$1=*" $DIR_GATE )
 
-        [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && exit 1 } || {
+        [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && return 1 } || {
             _DIR_=$(echo "$2" | sed "s:$HOME:~:") 
 
             echo "$1 = $_DIR_" >> $DIR_GATE
@@ -54,7 +55,7 @@ ga () {
 } || {
     _CHECK_=$(grep "^$1=*" $DIR_GATE )
 
-    [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && exit 1 } || {
+    [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && return 1 } || {
         _DIR_=$(dirs) 
 
         echo "$1 = $_DIR_" >> $DIR_GATE
@@ -67,29 +68,24 @@ ga () {
 
 # Remove a dir 
 gr () {
-[ "$1" = "help" ] && { USAGE && exit 0 }
-
-DDIR=0
+[ "$1" = "help" ] && { USAGE && return 0 }
 
 for D in ${@} ; do 
     D_CHECK_=$(grep "^$D=*" $DIR_GATE )
 
-    [ -n "$D_CHECK_" ] && {
+    [ -z "$D_CHECK_" ] && {
         echo " [ $D ] dosen't Exist "
-        DDIR=$(( $DDIR + 1 ))
     } || {
         sed -i "/$D/d" $DIR_GATE
         echo "[ $D ] Deleted "
     }
 done 
-
-[ "$DDIR" -gt 0 ] && exit 1
 }
 
 # Show dir marks 
 gs () {
 
-[ -n "$1" ] && { USAGE && exit 0}
+[ -n "$1" ] && { USAGE && return 0}
 
 echo "Marks :"
 cat $DIR_GATE | column -t | sort -u
@@ -97,13 +93,13 @@ cat $DIR_GATE | column -t | sort -u
 
 # dir Jumb
 gj () {
-[ "$1" = "help" -o -z "$1" ] && { USAGE && exit 0 }
-[ "$#" -gt 1 ] && {echo "" && exit 1}
+[ "$1" = "help" -o -z "$1" ] && { USAGE && return 0 }
+[ "$#" -gt 1 ] && {echo "" && return 1}
 
 J_CHECK=$(grep "^$1=*" $DIR_GATE)
 
 [ -z "$J_CHECK" ] && {
-    echo "" && exit 1
+    echo "" && return 1
 } || {
     JUB_DIR=$(grep "^$1=*" $DIR_GATE | cut -d " " -f3- | sed 's:^~:'"$HOME"':');
 
