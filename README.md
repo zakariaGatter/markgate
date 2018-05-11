@@ -3,7 +3,7 @@
 
 a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist marks
 
-[![Example](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P)]
+[![asciicast](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P.png)](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P)
 
 ## INSTALATION
 
