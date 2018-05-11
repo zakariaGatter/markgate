@@ -1,0 +1,139 @@
+#!/bin/bash 
+
+# config Folder 
+CONF_DIR="$HOME/.config"
+
+# file name in config dir 
+DIR_GATE="$CONF_DIR/dir_file"
+
+# create dir file if its not exist
+[ -f "$DIR_GATE" ] || touch "$DIR_GATE"
+
+# Version 
+_VERSION_="29/04/2018"
+
+# Help Dialog 
+USAGE () {
+echo "
+                MARK GATE ($_VERSION_)
+                Written by Zakaria Barkouk (zakaria.gatter@gmail.com)
+
+                Mark your directory's for Easy Access
+
+    OPTS    :       
+                ga          Add Mark Directory
+                gr          Remove Mark Directory 
+                gs          Show All Mark Directory's
+                gj          Jumb To mark Directory
+
+    EXAMPLE :   ga home             ( add 'home' Mark to corrent Directory)
+                ga home $HOME       ( Add 'home' Mark to $HOME Directory)
+                gj home             ( Jumb to 'home' Mark)
+                gr home             ( Delete 'home' Mark and suport multi Delete )
+
+    File    :   DIR_GATE=$DIR_GATE
+"
+}
+
+# Add new mark 
+ga () {
+    [ "$#" -eq "2" ] || { echo "Wrong argument(s), please see help for more information" && exit 0 }
+    [ "$1" = "help" -o -z "$1" ] && { USAGE && exit 0 }
+
+[ -d "$1" ] && { echo "" && exit 1 } ||{
+    [ -n "$2" ] && {
+        _CHECK_=$(grep "^$1=*" $DIR_GATE )
+
+        [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && exit 1 } || {
+            _DIR_=$(echo "$2" | sed "s:$HOME:~:") 
+
+            echo "$1 = $_DIR_" >> $DIR_GATE
+
+            echo "[ $1 ] Added "
+        }
+} || {
+    _CHECK_=$(grep "^$1=*" $DIR_GATE )
+
+    [ -n "$_CHECK_" ] && { echo "[ $1 ] Alredy Exist " && exit 1 } || {
+        _DIR_=$(dirs) 
+
+        echo "$1 = $_DIR_" >> $DIR_GATE
+
+        echo "[ $1 ] Added "
+    }
+}
+}
+}
+
+# Remove a dir 
+gr () {
+[ "$1" = "help" ] && { USAGE && exit 0 }
+
+DDIR=0
+
+for D in ${@} ; do 
+    D_CHECK_=$(grep "^$D=*" $DIR_GATE )
+
+    [ -n "$D_CHECK_" ] && {
+        echo " [ $D ] dosen't Exist "
+        DDIR=$(( $DDIR + 1 ))
+    } || {
+        sed -i "/$D/d" $DIR_GATE
+        echo "[ $D ] Deleted "
+    }
+done 
+
+[ "$DDIR" -gt 0 ] && exit 1
+}
+
+# Show dir marks 
+gs () {
+
+[ -n "$1" ] && { USAGE && exit 0}
+
+echo "Marks :"
+cat $DIR_GATE | column -t | sort -u
+}
+
+# dir Jumb
+gj () {
+[ "$1" = "help" -o -z "$1" ] && { USAGE && exit 0 }
+[ "$#" -gt 1 ] && {echo "" && exit 1}
+
+J_CHECK=$(grep "^$1=*" $DIR_GATE)
+
+[ -z "$J_CHECK" ] && {
+    echo "" && exit 1
+} || {
+    JUB_DIR=$(grep "^$1=*" $DIR_GATE | cut -d " " -f3- | sed 's:^~:'"$HOME"':');
+
+    cd $JUB_DIR
+
+}
+}
+
+# AUTO COMPLITION  for zsh 
+function _complete_zsh {
+    if [[ "$(cat "${DIR_GATE}" | wc -l)" -gt 0 ]];then 
+	reply=($(cut -d= -f1 $DIR_GATE))
+    fi
+}
+
+# Auto completion for bash 
+function _complete_bash {
+    local curw
+    COMPREPLY=()
+    curw=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=($(compgen -W "$(cut -d= -f1 $DIR_GATE)" -- $curw))
+    return 0
+}
+
+#exec the completion 
+if [ $ZSH_VERSION ]; then
+    compctl -K _complete_zsh gj
+    compctl -K _complete_zsh gr
+else
+    shopt -s progcomp
+    complete -F _complete_bash gj
+    complete -F _complete_bash gr
+fi
