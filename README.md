@@ -11,7 +11,7 @@ a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist
 git clone https://github.com/zakariaGatter/MarkGate ~/.oh-my-zsh/custom/plugins/markgate
 ```
 
-### Add MarkGate Plugin to ~.zshrc
+### Add MarkGate Plugin to ~.zshrc / ~/.bashrc
 
 ---
 
