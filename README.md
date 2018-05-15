@@ -1,7 +1,7 @@
 
 # MarkGate
 
-a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist marks
+a very simple **Bash** **Zsh**  Plugin to mark Directories With Autocompletion for exist marks
 
 [![asciicast](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P.png)](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P)
 
@@ -11,12 +11,35 @@ a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist
 git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate/markgate.sh
 ```
 
-### Add MarkGate Plugin to __~.zshrc__ or __~/.bashrc__
+### Add MarkGate Plugin to ~.zshrc or ~/.bashrc
 
 ---
 
 ```sh
 source /path/to/markgate/markgate.sh
+```
+
+### Help
+
+```
+    MARK GATE (29/04/2018)
+    Written by Zakaria Barkouk (zakaria.gatter@gmail.com)
+
+    Mark your directory's for Easy Access
+
+OPTS    :       
+        ga          Add Mark Directory
+        gr          Remove Mark Directory 
+        gs          Show All Mark Directory's
+        gj          Jumb To mark Directory
+
+EXAMPLE :   
+        ga home     ( add 'home' Mark to corrent Directory)
+        ga home ~   ( Add 'home' Mark to /home/gatter Directory)
+        gj home     ( Jumb to 'home' Mark)
+        gr home     ( Delete 'home' Mark and suport multi Delete )
+
+File    :   DIR_GATE=~/.config/dir_file
 ```
 
 #### Usage
