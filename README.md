@@ -8,15 +8,15 @@ a very simple Oh-My-ZSH Plugin to mark Directories With Autocompletion for exist
 ## INSTALATION
 
 ```sh
-git clone https://github.com/zakariaGatter/MarkGate ~/.oh-my-zsh/custom/plugins/markgate
+git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate/markgate.sh
 ```
 
-### Add MarkGate Plugin to ~.zshrc / ~/.bashrc
+### Add MarkGate Plugin to __~.zshrc__ or __~/.bashrc__
 
 ---
 
 ```sh
-source ~/.oh-my-zsh/custom/plugins/markgate/markgate
+source /path/to/markgate/markgate.sh
 ```
 
 #### Usage
@@ -26,19 +26,19 @@ source ~/.oh-my-zsh/custom/plugins/markgate/markgate
 * [X] : **Add Mark**
 
 ```sh
-cd ~/.oh-my-zsh/custom/plugins/markgate
+cd /path/to/markgate
 ga markgate
 ```
 
 or
 
 ``` sh
-ga makgate ~/.oh-my-zsh/custom/plugins/markgate
+ga makgate /path/to/markgate
 ```
 
 * [X] : **Remove Mark**
 ```sh
-gr markgate (multi mark remove)
+gr markgate _(multi mark remove)_
 ```
 
 * [X] : **Jumb to Mark**
@@ -51,7 +51,12 @@ gj markgate
 gs
  ```
 
-### [!] Notes
+### Support 
+
+    * [Fiverr](https://www.fiverr.com/zakariagatter)
+    * [Donate](https://www.paypal.me/ZGatter)
+
+### Notes
 
 If You Found any issues or have new ideos please send me a mail to :
 
@@ -66,3 +71,4 @@ zakaria.gatter@gmail.com
 
  * [Powergate Theme](https://github.com/zakariaGatter/Powergate)
  * [MarkEdit](https://github.com/zakariaGatter/MarkEdit)
+ * [i3blocks-Gate](https://github.com/zakariaGatter/i3blocks-gate)

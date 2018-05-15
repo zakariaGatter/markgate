@@ -4,7 +4,7 @@
 CONF_DIR="$HOME/.config"
 
 # file name in config dir 
-DIR_GATE="$CONF_DIR/dir_file"
+DIR_GATE="$CONF_DIR/dir_gate"
 
 # create dir file if its not exist
 [ -f "$DIR_GATE" ] || touch "$DIR_GATE"
@@ -32,7 +32,7 @@ EXAMPLE :
         gj home     ( Jumb to 'home' Mark)
         gr home     ( Delete 'home' Mark and suport multi Delete )
 
-File    :   DIR_GATE=$DIR_GATE
+File    :   DIR_GATE=\"~/.config/dir_gate\"
 "
 }
 
