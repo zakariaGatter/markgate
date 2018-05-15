@@ -76,8 +76,8 @@ gs
 
 ### Support 
 
-    * [Fiverr](https://www.fiverr.com/zakariagatter)
-    * [Donate](https://www.paypal.me/ZGatter)
+   * [Fiverr](https://www.fiverr.com/zakariagatter)
+   * [Donate](https://www.paypal.me/ZGatter)
 
 ### Notes
 
