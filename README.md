@@ -1,14 +1,14 @@
 
 # MarkGate
 
-a very simple **Bash** **Zsh**  Plugin to mark Directories With Autocompletion for exist marks
+a very simple **Bash** ; **Zsh**  Plugin to mark Directories With Autocompletion for exist marks
 
 [![asciicast](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P.png)](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P)
 
 ## INSTALATION
 
 ```sh
-git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate/markgate.sh
+git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate
 ```
 
 ### Add MarkGate Plugin to ~.zshrc or ~/.bashrc
@@ -32,14 +32,17 @@ OPTS    :
         gr          Remove Mark Directory 
         gs          Show All Mark Directory's
         gj          Jumb To mark Directory
+        ge          Change or Edit Exist mark
 
 EXAMPLE :   
         ga home     ( add 'home' Mark to corrent Directory)
         ga home ~   ( Add 'home' Mark to /home/gatter Directory)
         gj home     ( Jumb to 'home' Mark)
         gr home     ( Delete 'home' Mark and suport multi Delete )
+        gs          ( Show all mark in your System )
+        ge home     (Edit or Change Mark name or Directory)
 
-File    :   DIR_GATE=~/.config/dir_file
+File    :   DIR_GATE="~/.config/dir_file"
 ```
 
 #### Usage
@@ -61,7 +64,7 @@ ga makgate /path/to/markgate
 
 * [X] : **Remove Mark**
 ```sh
-gr markgate _(multi mark remove)_
+gr markgate (multi mark remove)
 ```
 
 * [X] : **Jumb to Mark**
@@ -74,10 +77,15 @@ gj markgate
 gs
  ```
 
+* [X] : **Change mark Dir or Name**
+```sh
+ge markgate
+```
+
 ### Support 
 
-   * [Fiverr](https://www.fiverr.com/zakariagatter)
-   * [Donate](https://www.paypal.me/ZGatter)
+ * [Fiverr](https://www.fiverr.com/zakariagatter)
+ * [Donate](https://www.paypal.me/ZGatter)
 
 ### Notes
 
