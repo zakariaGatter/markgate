@@ -1,23 +1,76 @@
-
 # MarkGate
 
-a very simple **Bash** ; **Zsh**  Plugin to mark Directories With Autocompletion for exist marks
 
-[![asciicast](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P.png)](https://asciinema.org/a/1vT0VaYFveXzKwlM94rs6871P)
+## Table of Contents 
 
-## INSTALATION
+- [About](#about)
+- [Usage](#usage)
+- [Installation](#installation)
+- [Help](#help)
+
+## About
+
+[MarkGate] Is a very simple (Bash/Zsh) Plugin to mark Directories With Auto completion for exist marks
+
+[MarkGate] allow you to ...
+
+* Mark directory's
+* Jump to marked directory 
+* Delete a Mark
+* Edit exist Mark
+
+---
+
+## Usage
+
+* **Add Mark**
+
+```sh
+cd /path/to/markgate
+ga markgate
+```
+
+or
+
+```sh
+ga makgate /path/to/markgate
+```
+
+* **Remove Mark**
+```sh
+gr markgate (multi mark remove)
+```
+
+* **Jump to Mark**
+```sh
+gj markgate
+```
+
+* **Show Marks**
+```sh
+gs
+```
+
+* **Edit Marks**
+```sh
+ge markgate
+```
+
+---
+
+## INSTALLATION
 
 ```sh
 git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate
 ```
 
-### Add MarkGate Plugin to ~.zshrc or ~/.bashrc
-
----
+#### Add MarkGate Plugin to ~./zshrc or ~/.bashrc
 
 ```sh
 source /path/to/markgate/markgate.sh
 ```
+
+---
 
 ### Help
 
@@ -31,75 +84,16 @@ OPTS    :
         ga          Add Mark Directory
         gr          Remove Mark Directory 
         gs          Show All Mark Directory's
-        gj          Jumb To mark Directory
+        gj          Jump To mark Directory
         ge          Change or Edit Exist mark
 
 EXAMPLE :   
-        ga home     ( add 'home' Mark to corrent Directory)
+        ga home     ( add 'home' Mark to current Directory)
         ga home ~   ( Add 'home' Mark to /home/gatter Directory)
         gj home     ( Jumb to 'home' Mark)
-        gr home     ( Delete 'home' Mark and suport multi Delete )
+        gr home     ( Delete 'home' Mark and support multi Delete )
         gs          ( Show all mark in your System )
         ge home     (Edit or Change Mark name or Directory)
 
 File    :   DIR_GATE="~/.config/dir_file"
 ```
-
-#### Usage
-
----
-
-* [X] : **Add Mark**
-
-```sh
-cd /path/to/markgate
-ga markgate
-```
-
-or
-
-``` sh
-ga makgate /path/to/markgate
-```
-
-* [X] : **Remove Mark**
-```sh
-gr markgate (multi mark remove)
-```
-
-* [X] : **Jumb to Mark**
-```sh
-gj markgate
-```
-* [X] : **Show Marks**
-
- ```sh
-gs
- ```
-
-* [X] : **Change mark Dir or Name**
-```sh
-ge markgate
-```
-
-### Support 
-
- * [Fiverr](https://www.fiverr.com/zakariagatter)
- * [Donate](https://www.paypal.me/ZGatter)
-
-### Notes
-
-If You Found any issues or have new ideos please send me a mail to :
-
-**Gmail :**
-
-``` bash
-zakaria.gatter@gmail.com
-
-```
-
-#### You may like 
-
- * [Powergate Theme](https://github.com/zakariaGatter/Powergate)
- * [MarkEdit](https://github.com/zakariaGatter/MarkEdit)
- * [i3blocks-Gate](https://github.com/zakariaGatter/i3blocks-gate)
