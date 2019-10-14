@@ -61,7 +61,7 @@ ge markgate
 ## INSTALLATION
 
 ```sh
-git clone https://github.com/zakariaGatter/MarkGate /path/to/markgate
+git clone https://gitlab.com/zakariagatter/markgate /path/to/markgate
 ```
 
 #### Add MarkGate Plugin to ~./zshrc or ~/.bashrc
@@ -95,5 +95,4 @@ EXAMPLE :
         gs          ( Show all mark in your System )
         ge home     (Edit or Change Mark name or Directory)
 
-File    :   DIR_GATE="~/.config/dir_file"
 ```
