@@ -1,27 +1,25 @@
 #!/bin/zsh
 
-#--------------------#
-# MARK FOLDERS CACHE #
-#--------------------#{{{
-MARKGATE_CACHE="$HOME/.cache/markgate.cache"
-# }}}
+#-------------#
+# CACHE FILE  #
+#-------------#{{{
+_mg_cache_="$HOME/.cache/markgate"
+#}}}
 
 #--------------#
-# HELP DIALOG  #
+# ADD NEW MARK #
 #--------------#{{{
-USAGE () {
-echo "
-MARK GATE
-Written by Zakaria Barkouk (gitlab.com/zakariagtter)
-
-Mark your directory's for Easy Access
+ga(){
+[ -z "${1}" -o "${#}" -gt 2 ] && {
+cat <<- HELP
+[MARKGATE] Mark your directory's for Easy Access
 
 OPTS :
- ga          Add Mark Directory
- gr          Remove Mark Directory
- gs          Show All Mark Directory's
- gj          Jumb To mark Directory
- ge          Change or Edit Exist mark
+ ga         Add Mark Directory
+ gr         Remove Mark Directory
+ gj         Jumb To mark Directory
+ gs         Show All Mark Directory's
+ ge         Change or Edit Exist mark
 
 EXAMPLE :
  ga home     ( add 'home' Mark to corrent Directory )
@@ -29,138 +27,165 @@ EXAMPLE :
  gj home     ( Jumb to 'home' Mark )
  gr home     ( Delete 'home' Mark and support multi Delete )
  ge home     ( Edit or Change Mark name or Directory )
-"
+HELP
+return 0
 }
-# }}}
 
-#-----------------#
-# MAKE A NEW MARK #
-#-----------------#{{{
-ga(){
-[ "$#" -gt 2 -o -z "$1" ] && USAGE
+local _name_=${1}
+local _path_=${2:-${PWD/$HOME/\~}}
 
-local name path check
+local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
 
-name="${1}"			# mark name the first argument
-path="${2:-$PWD}"   # make path the second argument
-path="$path:P"
-
-## start adding marks
-# check if the mark already exist
-check=$(awk '/^'"$name"' /' "$MARKGATE_CACHE")
-
-if [ -z "$check" ]; then
-    if [ -d "$path" ]; then
-		echo -e "[+] - $name Added"
-		echo -e "$name ; $path" >> "$MARKGATE_CACHE"
-    else
-		echo -e "[X] - $path no such directory"
-    fi
-else
-    echo -e "[X] - $name mark alredy exist"
-fi
+[ "$_check_" ] && {
+    echo -e "[X] $_name_: Already exist " >&2
+} || {
+    echo -e "$_name_ ; $_path_" >> "$_mg_cache_"
+    echo -e "[+] $_name_: Added" >&2
 }
-# }}}
+}
+#}}}
 
-#---------------#
-# REMOVE A MARK #
-#---------------#{{{
+#--------------#
+# REMOVE MARKS #
+#--------------#{{{
 gr(){
-[ -z "$1" ] && USAGE
+[ "${1}" ] || {
+cat <<- HELP
+[MARKGATE] Mark your directory's for Easy Access
 
-local check i
+OPTS :
+ ga         Add Mark Directory
+ gr         Remove Mark Directory
+ gj         Jumb To mark Directory
+ gs         Show All Mark Directory's
+ ge         Change or Edit Exist mark
 
-for i in $@; do
-    #check if the mark exist
-    check=$(awk '/^'"$i"' /' "$MARKGATE_CACHE")
+EXAMPLE :
+ ga home     ( add 'home' Mark to corrent Directory )
+ ga home ~   ( Add 'home' Mark to $HOME Directory )
+ gj home     ( Jumb to 'home' Mark )
+ gr home     ( Delete 'home' Mark and support multi Delete )
+ ge home     ( Edit or Change Mark name or Directory )
+HELP
+    return 0
+}
 
-    # remove the mark
-    if [ -z "$check" ]; then
-		echo -e "[X] - $i none exist mark"
-    else
-		sed -i "/^$i /d" $MARKGATE_CACHE
-		echo -e "[-] - $i Deleted "
-    fi
+local _name_=${1}
+
+for i in $@ ; do
+    local _check_=$(\grep "^$i " $_mg_cache_ 2> /dev/null)
+
+    [ "$_check_" ] && {
+        \sed -i "/^$i /d" $_mg_cache_
+        echo -e "[-] $_name_: Removed" >&2
+    } || {
+        echo -e "[X] $_name_: No mark exist " >&2
+    }
 done
 }
-# }}}
+#}}}
 
-#------------------#
-# JUMB TO THE MARK #
-#------------------#{{{
+#--------------#
+# JUMB TO MARK #
+#--------------#{{{
 gj(){
-[ -z "$1" ] && USAGE
+[ "${#}" -gt 1 -o -z "$1" ] && {
+cat <<- HELP
+[MARKGATE] Mark your directory's for Easy Access
 
-local check path
+OPTS :
+ ga         Add Mark Directory
+ gr         Remove Mark Directory
+ gj         Jumb To mark Directory
+ gs         Show All Mark Directory's
+ ge         Change or Edit Exist mark
 
-# check if the mark exist
-check=$(awk '/^'"$1"' /' "$MARKGATE_CACHE")
-
-# jumb to mark
-if [ -z "$check" ]; then
-    echo -e "[X] - $1 none exist mark"
-else
-    path=$(awk -F ';' '/^'"$1"' /{print $2}' "$MARKGATE_CACHE")
-    eval "cd $path"
-fi
-
+EXAMPLE :
+ ga home     ( add 'home' Mark to corrent Directory )
+ ga home ~   ( Add 'home' Mark to $HOME Directory )
+ gj home     ( Jumb to 'home' Mark )
+ gr home     ( Delete 'home' Mark and support multi Delete )
+ ge home     ( Edit or Change Mark name or Directory )
+HELP
+    return 0
 }
-# }}}
 
-#-----------------#
-# SHOW EXIS MARKS #
-#-----------------#{{{
+local _name_=${1}
+local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
+local _path_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null | \cut -d " " -f3-)
+
+[ "$_check_" ] && {
+    \builtin cd -- $_path_ &> /dev/null || echo -e "[X] $_path_: no such file or directory" >&2
+} || {
+    echo -e "[X] $_name_: No mark exist " >&2
+}
+}
+#}}}
+
+#-------------#
+# SHOW MARKS  #
+#-------------#{{{
 gs(){
-if [ -z "$1" ]; then
-    column -t -s ';' "$MARKGATE_CACHE"
-else
-    for i in $@; do
-		check=$(awk '/^'"$i"' /' "$MARKGATE_CACHE")
+local _name_=${1}
 
-		if [ -z "$check" ]; then
-			echo -e "[X] - $i None exist Mark"
-		else
-			echo -e "$check" | column -t -s ';'
-		fi
-    done
-fi
+[ "$_name_" ] && {
+    local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
+
+    [ "$_check_" ] && {
+        echo -e "$_check_" | \column -t -s ";"
+    } || {
+        echo -e "[X] $_name_: No mark exist " >&2
+    }
+} || {
+    \column -t -s ";" $_mg_cache_
 }
-# }}}
+}
+#}}}
 
-#------------------#
-# EDIT EXIST MARKS #
-#------------------#{{{
+#-----------#
+# MARK EDIT #
+#-----------#{{{
 ge(){
-[ "$#" -gt 1 -o -z "$1" ] && USAGE
+[ -z "${1}" -o "${#}" -gt 1 ] && {
+cat <<- HELP
+[MARKGATE] Mark your directory's for Easy Access
 
-local mark _mark_
+OPTS :
+ ga         Add Mark Directory
+ gr         Remove Mark Directory
+ gj         Jumb To mark Directory
+ gs         Show All Mark Directory's
+ ge         Change or Edit Exist mark
 
-# get the mark
-mark=$(awk '/^'"$1"' /' "$MARKGATE_CACHE")
-
-if [ -z "$mark" ]; then
-    echo -e "[X] - $mark None exist Mark"
-else
-    # delete the mark
-    sed -i "/$mark/d" $MARKGATE_CACHE
-
-    # edit the mark with zle
-    vared mark
-
-    sed -i "/$mark/$_mark_" $MARKGATE_CACHE
-
-    # rewrite the mark
-    echo $mark >> "$MARKGATE_CACHE"
-fi
+EXAMPLE :
+ ga home     ( add 'home' Mark to corrent Directory )
+ ga home ~   ( Add 'home' Mark to $HOME Directory )
+ gj home     ( Jumb to 'home' Mark )
+ gr home     ( Delete 'home' Mark and support multi Delete )
+ ge home     ( Edit or Change Mark name or Directory )
+HELP
+    return 0
 }
-# }}}
+
+local _name_=${1}
+local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
+
+[ "$_check_" ] && {
+    \sed -i "/^$_name_ /d" $_mg_cache_
+    vared _check_
+    echo -e "$_check_" >> $_mg_cache_
+} || {
+    echo -e "[X] $_name_: No mark exist " >&2
+}
+}
+#}}}
 
 #---------------------------#
 # AUTO COMPLITION  FOR ZSH  #
 #---------------------------#{{{
 function _markgate {
-    if [[ "$(grep -c ".*" $MARKGATE_CACHE)" -gt 0 ]];then
-		reply=($(awk -F ';' '{print $1}' "$MARKGATE_CACHE"))
+    if [[ "$(wc -l < $_mg_cache_)" -gt 0 ]];then
+		reply=( $(\cut -d " " -f1 $_mg_cache_) )
     fi
 }
 # }}}
@@ -173,3 +198,5 @@ compctl -K _markgate gr
 compctl -K _markgate ge
 compctl -K _markgate gs
 #}}}
+
+# vim: ft=sh
