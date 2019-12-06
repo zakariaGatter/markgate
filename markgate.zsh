@@ -6,11 +6,10 @@
 _mg_cache_="$HOME/.cache/markgate"
 #}}}
 
-#--------------#
-# ADD NEW MARK #
-#--------------#{{{
-ga(){
-[ -z "${1}" -o "${#}" -gt 2 ] && {
+#-------------#
+# HELP DIALOG #
+#-------------#{{{
+_markgate_help_(){
 cat <<- HELP
 [MARKGATE] Mark your directory's for Easy Access
 
@@ -28,8 +27,14 @@ EXAMPLE :
  gr home     ( Delete 'home' Mark and support multi Delete )
  ge home     ( Edit or Change Mark name or Directory )
 HELP
-return 0
 }
+#}}}
+
+#--------------#
+# ADD NEW MARK #
+#--------------#{{{
+ga(){
+[ -z "${1}" -o "${#}" -gt 2 ] && { _markgate_help_ && return 0 ;}
 
 local _name_=${1}
 local _path_=${2:-${PWD/$HOME/\~}}
@@ -49,26 +54,7 @@ local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
 # REMOVE MARKS #
 #--------------#{{{
 gr(){
-[ "${1}" ] || {
-cat <<- HELP
-[MARKGATE] Mark your directory's for Easy Access
-
-OPTS :
- ga         Add Mark Directory
- gr         Remove Mark Directory
- gj         Jumb To mark Directory
- gs         Show All Mark Directory's
- ge         Change or Edit Exist mark
-
-EXAMPLE :
- ga home     ( add 'home' Mark to corrent Directory )
- ga home ~   ( Add 'home' Mark to $HOME Directory )
- gj home     ( Jumb to 'home' Mark )
- gr home     ( Delete 'home' Mark and support multi Delete )
- ge home     ( Edit or Change Mark name or Directory )
-HELP
-    return 0
-}
+[ "${1}" ] || { _markgate_help_ && return 0 ;}
 
 local _name_=${1}
 
@@ -89,26 +75,7 @@ done
 # JUMB TO MARK #
 #--------------#{{{
 gj(){
-[ "${#}" -gt 1 -o -z "$1" ] && {
-cat <<- HELP
-[MARKGATE] Mark your directory's for Easy Access
-
-OPTS :
- ga         Add Mark Directory
- gr         Remove Mark Directory
- gj         Jumb To mark Directory
- gs         Show All Mark Directory's
- ge         Change or Edit Exist mark
-
-EXAMPLE :
- ga home     ( add 'home' Mark to corrent Directory )
- ga home ~   ( Add 'home' Mark to $HOME Directory )
- gj home     ( Jumb to 'home' Mark )
- gr home     ( Delete 'home' Mark and support multi Delete )
- ge home     ( Edit or Change Mark name or Directory )
-HELP
-    return 0
-}
+[ "${#}" -gt 1 -o -z "$1" ] && { _markgate_help_ && return 0 ;}
 
 local _name_=${1}
 local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
@@ -146,26 +113,7 @@ local _name_=${1}
 # MARK EDIT #
 #-----------#{{{
 ge(){
-[ -z "${1}" -o "${#}" -gt 1 ] && {
-cat <<- HELP
-[MARKGATE] Mark your directory's for Easy Access
-
-OPTS :
- ga         Add Mark Directory
- gr         Remove Mark Directory
- gj         Jumb To mark Directory
- gs         Show All Mark Directory's
- ge         Change or Edit Exist mark
-
-EXAMPLE :
- ga home     ( add 'home' Mark to corrent Directory )
- ga home ~   ( Add 'home' Mark to $HOME Directory )
- gj home     ( Jumb to 'home' Mark )
- gr home     ( Delete 'home' Mark and support multi Delete )
- ge home     ( Edit or Change Mark name or Directory )
-HELP
-    return 0
-}
+[ -z "${1}" -o "${#}" -gt 1 ] && { _markgate_help_ && return 0 ;}
 
 local _name_=${1}
 local _check_=$(\grep "^$_name_ " $_mg_cache_ 2> /dev/null)
