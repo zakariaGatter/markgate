@@ -1,7 +1,7 @@
 # MarkGate
 
 
-## Table of Contents 
+## Table of Contents
 
 - [About](#about)
 - [Usage](#usage)
@@ -15,7 +15,7 @@
 [MarkGate] allow you to ...
 
 * Mark directory's
-* Jump to marked directory 
+* Jump to marked directory
 * Delete a Mark
 * Edit exist Mark
 
@@ -61,7 +61,7 @@ ge markgate
 ## INSTALLATION
 
 ```sh
-git clone https://gitlab.com/zakariagatter/markgate /path/to/markgate
+git clone https://github.com/zakariagatter/markgate /path/to/markgate
 ```
 
 #### Add MarkGate Plugin to ~./zshrc or ~/.bashrc
@@ -80,14 +80,14 @@ source /path/to/markgate/markgate.sh
 
     Mark your directory's for Easy Access
 
-OPTS    :       
+OPTS    :
         ga          Add Mark Directory
-        gr          Remove Mark Directory 
+        gr          Remove Mark Directory
         gs          Show All Mark Directory's
         gj          Jump To mark Directory
         ge          Change or Edit Exist mark
 
-EXAMPLE :   
+EXAMPLE :
         ga home     ( add 'home' Mark to current Directory)
         ga home ~   ( Add 'home' Mark to /home/gatter Directory)
         gj home     ( Jumb to 'home' Mark)
