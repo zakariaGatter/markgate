@@ -1,150 +1,142 @@
-#!/usr/bin/env zsh
+#!/bin/zsh 
 
-#-------------#
-# CACHE FILE  #
-#-------------#{{{
-_mg_cache_="$HOME/.cache/markgate"
-#}}}
+#-------------------#
+# GENERAL VARIABLES #
+#-------------------#
+_MARKGATE_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/markgate"
+[ -f "$_MARKGATE_CACHE" ] || touch $_MARKGATE_CACHE
 
 #-------------#
 # HELP DIALOG #
-#-------------#{{{
-_markgate_help_(){
-cat <<- HELP
-[MARKGATE] Mark your directory's for Easy Access
+#-------------#
+gh(){
+while read ;do
+    printf "%s\n" "$REPLY"
+done <<-HELP
+MarkGate: Mark your Directories for easy access
 
-OPTS :
- ga         Add Mark Directory
- gr         Remove Mark Directory
- gj         Jumb To mark Directory
- gs         Show All Mark Directory's
- ge         Change or Edit Exist mark
-
-EXAMPLE :
- ga home     ( add 'home' Mark to corrent Directory )
- ga home ~   ( Add 'home' Mark to $HOME Directory )
- gj home     ( Jumb to 'home' Mark )
- gr home     ( Delete 'home' Mark and support multi Delete )
- ge home     ( Edit or Change Mark name or Directory )
+FUNCTION:
+  ga <name> <DIR>   Add new mark to Markgate
+  gj <name>         Jumb to giving mark
+  gr <name> ...     Remove one or multi Marks
+  gs <name> ...     Display list of marks
+  gh                Show this help dialog
 HELP
+return 0
 }
-#}}}
 
 #--------------#
 # ADD NEW MARK #
-#--------------#{{{
+#--------------#
 ga(){
-[ -z "${1}" -o "${#}" -gt 2 ] && { _markgate_help_ && return 0 ;}
+    (( $# > 2 )) && gh
 
-local _name_=${1}
-local _path_=${2:-${PWD/$HOME/\~}}
+    name="$1"
+    dir="$2"
 
-local _check_=$(grep "^$_name_ " $_mg_cache_ 2> /dev/null)
+    if [ ! -d "$dir" ]; then 
+       printf "%s\n" "MarkGate: '$dir' No Such directory " >&2
+       return 2
+    fi
 
-[ "$_check_" ] && {
-    echo -e "[X] $_name_: Already exist " >&2
-} || {
-    echo -e "$_name_ ; $_path_" >> "$_mg_cache_"
-    echo -e "[+] $_name_: Added" >&2
+    while IFS=':' read -A line ;do
+       if [ "$line[1]" = "$name" ]; then 
+           printf "%s\n" "MarkGate: '$name' Mark already Exist" >&2
+           return 2
+       elif [ "$line[2]" = "$dir" ]; then
+           printf "%s\n" "MarkGate: '$dir' Directory already marked as '$line[1]'" >&2
+           return 2
+       fi
+    done < $_MARKGATE_CACHE
+
+    printf "%s:%s\n" "$name" "$dir" >> $_MARKGATE_CACHE
+    printf "%s\n" "MarkGate: '$name' Mark created "
+
+    unset name dir line 
 }
-}
-#}}}
 
-#--------------#
-# REMOVE MARKS #
-#--------------#{{{
-gr(){
-[ "${1}" ] || { _markgate_help_ && return 0 ;}
-
-local _name_=${1}
-
-for i in $@ ; do
-    local _check_=$(grep "^$i " $_mg_cache_ 2> /dev/null)
-
-    [ "$_check_" ] && {
-        sed -i "/^$i /d" $_mg_cache_
-        echo -e "[-] $_name_: Removed" >&2
-    } || {
-        echo -e "[X] $_name_: No mark exist " >&2
-    }
-done
-}
-#}}}
-
-#--------------#
-# JUMB TO MARK #
-#--------------#{{{
+#----------------#
+# JUMB TO A MARK #
+#----------------#
 gj(){
-[ "${#}" -gt 1 -o -z "$1" ] && { _markgate_help_ && return 0 ;}
+    (( $# > 1 )) && gh
 
-local _name_=${1}
-local _check_=$(grep "^$_name_ " $_mg_cache_ 2> /dev/null)
-local _path_=$(grep "^$_name_ " $_mg_cache_ 2> /dev/null | cut -d " " -f3-)
+    name="$1"  
+    while IFS=':' read -A line ;do
+       if [ "$line[1]" = "$name" ]; then
+           builtin cd "$line[2]"
+           Jumb=true
+           break
+       fi
+    done < $_MARKGATE_CACHE
 
-[ "$_check_" ] && {
-    builtin cd -- $_path_ &> /dev/null || echo -e "[X] $_path_: no such file or directory" >&2
-} || {
-    echo -e "[X] $_name_: No mark exist " >&2
+    if [ -z "$Jumb" ]; then 
+        printf "%s\n" "MarkGate: '$name' No such Mark"
+        return 2
+    fi
+
+    unset line Jumb
 }
-}
-#}}}
 
-#-------------#
-# SHOW MARKS  #
-#-------------#{{{
+#---------------#
+# REMOVE A MARK #
+#---------------#
+gr(){
+    [ -z "$1" ] && gh
+
+    for name in $@ ; do
+        while IFS=":" read -A line ;do
+            if [ "$line[1]" = "$name" ]; then 
+                sed -i "/^$name/d" $_MARKGATE_CACHE
+                printf "%s\n" "'$name' Remove Mark"
+                Remove=true
+                break
+            fi
+        done < $_MARKGATE_CACHE
+        if [ -z "$Remove" ]; then 
+            printf "%s\n" "MarkGate: '$name' No such Mark"
+        fi
+        unset Remove
+    done
+
+    unset line name
+}
+
+#--------------------#
+# SHOW LIST OF MARKS #
+#--------------------#
 gs(){
-local _name_=${1}
-
-[ "$_name_" ] && {
-    local _check_=$(grep "^$_name_ " $_mg_cache_ 2> /dev/null)
-
-    [ "$_check_" ] && {
-        echo -e "$_check_" | column -t -s ";"
-    } || {
-        echo -e "[X] $_name_: No mark exist " >&2
-    }
-} || {
-    column -t -s ";" $_mg_cache_
-}
-}
-#}}}
-
-#-----------#
-# MARK EDIT #
-#-----------#{{{
-ge(){
-[ -z "${1}" -o "${#}" -gt 1 ] && { _markgate_help_ && return 0 ;}
-
-local _name_=${1}
-local _check_=$(grep "^$_name_ " $_mg_cache_ 2> /dev/null)
-
-[ "$_check_" ] && {
-    sed -i "/^$_name_ /d" $_mg_cache_
-    vared _check_
-    echo -e "$_check_" >> $_mg_cache_
-} || {
-    echo -e "[X] $_name_: No mark exist " >&2
-}
-}
-#}}}
-
-#---------------------------#
-# AUTO COMPLITION  FOR ZSH  #
-#---------------------------#{{{
-function _markgate {
-    if [[ "$(wc -l < $_mg_cache_)" -gt 0 ]];then
-		reply=( $(cut -d " " -f1 $_mg_cache_) )
+    if [ -z "$1" ]; then 
+        column -t -s ':' $_MARKGATE_CACHE
+    else
+        for name in $@ ;do
+            while IFS=':' read -A line ; do
+                if [[ $line[1] =~ $name ]]; then 
+                    printf "%s %15s" "$line[1]" "$line[2]" 
+                fi
+            done < $_MARKGATE_CACHE
+        done
     fi
 }
-# }}}
 
-#----------------------#
-# EXEC THE COMPLETION  #
-#----------------------#{{{
+#----------------#
+# ZSH COMPLETION #
+#----------------#
+_markgate(){
+    while IFS=':' read -A line ; do
+        ListMark+=( "$line[1]" )
+    done < $_MARKGATE_CACHE
+
+    if (( ${#ListMark[@]} > 0 )); then 
+        reply=( ${ListMark[@]} )
+    fi
+
+    unset line ListMark
+}
+
+#------------------#
+# APPLY COMPLETION #
+#------------------#
 compctl -K _markgate gj
 compctl -K _markgate gr
-compctl -K _markgate ge
 compctl -K _markgate gs
-#}}}
-
-# vim: ft=sh

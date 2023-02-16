@@ -10,27 +10,20 @@
 
 ## About
 
-[MarkGate] Is a very simple (Bash/Zsh) Plugin to mark Directories With Auto completion for exist marks
+[MarkGate] Is a very simple (Zsh) Plugin to mark Directories With Auto completion for exist marks
 
 [MarkGate] allow you to ...
 
 * Mark directory's
 * Jump to marked directory
 * Delete a Mark
-* Edit exist Mark
+* Display list of marks
 
 ---
 
 ## Usage
 
 * **Add Mark**
-
-```sh
-cd /path/to/markgate
-ga markgate
-```
-
-or
 
 ```sh
 ga makgate /path/to/markgate
@@ -51,11 +44,6 @@ gj markgate
 gs
 ```
 
-* **Edit Marks**
-```sh
-ge markgate
-```
-
 ---
 
 ## INSTALLATION
@@ -64,7 +52,7 @@ ge markgate
 git clone https://github.com/zakariagatter/markgate /path/to/markgate
 ```
 
-#### Add MarkGate Plugin to ~./zshrc or ~/.bashrc
+#### Add MarkGate Plugin to ~./zshrc
 
 ```sh
 source /path/to/markgate/markgate.sh
@@ -75,24 +63,17 @@ source /path/to/markgate/markgate.sh
 ### Help
 
 ```
-    MARK GATE (29/04/2018)
-    Written by Zakaria Barkouk (zakaria.gatter@gmail.com)
+MarkGate: Mark your Directories for easy access
 
-    Mark your directory's for Easy Access
-
-OPTS    :
-        ga          Add Mark Directory
-        gr          Remove Mark Directory
-        gs          Show All Mark Directory's
-        gj          Jump To mark Directory
-        ge          Change or Edit Exist mark
-
-EXAMPLE :
-        ga home     ( add 'home' Mark to current Directory)
-        ga home ~   ( Add 'home' Mark to /home/gatter Directory)
-        gj home     ( Jumb to 'home' Mark)
-        gr home     ( Delete 'home' Mark and support multi Delete )
-        gs          ( Show all mark in your System )
-        ge home     (Edit or Change Mark name or Directory)
+FUNCTION:
+ga <name> <DIR>   Add new mark to Markgate
+gj <name>         Jumb to giving mark
+gr <name> ...     Remove one or multi Marks
+gs <name> ...     Display list of marks
+gh                Show this help dialog
 
 ```
+
+### Note
+
+This Plugin is complete. If there is any modifications in the future, they will be just syntax improving. (Thank you all for using **Markgate**)
